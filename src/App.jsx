@@ -5,10 +5,6 @@ import { consolaFont } from './consolaFont';
 import { PROGRAMS } from './programs';
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [passwordInput, setPasswordInput] = useState('');
-  const [passError, setPassError] = useState(false);
-
   const [formData, setFormData] = useState({
     name: '',
     rollNo: '',
@@ -144,57 +140,6 @@ function App() {
     const fileName = `${safeOutputName}_DSA_Record.pdf`;
     doc.save(fileName);
   };
-
-  if (!isAuthenticated) {
-    return (
-      <div style={{ backgroundColor: '#111b22', position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
-        <div style={{ backgroundColor: 'white', borderRadius: '8px', padding: '30px 40px', width: '100%', maxWidth: '440px', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
-          <h1 style={{ color: '#031b26', fontSize: '24px', margin: '0 0 15px 0', fontWeight: 'bold' }}>Password protected site</h1>
-          <p style={{ color: '#031b26', margin: '0 0 25px 0', fontSize: '16px' }}>Please enter your password to get access.</p>
-          
-          <form onSubmit={(e) => {
-            e.preventDefault();
-            if (passwordInput.trim().toLowerCase() === 'dsa123') {
-              setIsAuthenticated(true);
-              setPassError(false);
-            } else {
-              setPassError(true);
-            }
-          }} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-            <input 
-              type="password" 
-              value={passwordInput} 
-              onChange={(e) => { setPasswordInput(e.target.value); setPassError(false); }} 
-              placeholder="Password" 
-              style={{
-                width: '100%',
-                padding: '12px 15px',
-                fontSize: '15px',
-                borderRadius: '4px',
-                border: '2px solid #eab308', // Yellow border matching image
-                outline: 'none',
-                color: '#333'
-              }}
-              required 
-            />
-            {passError && <p style={{ color: '#ef4444', margin: '-10px 0 0 0', fontSize: '14px' }}>Incorrect password</p>}
-            <button type="submit" style={{
-              backgroundColor: '#047857', // Dark green matching image
-              color: 'white',
-              border: 'none',
-              padding: '12px',
-              borderRadius: '6px',
-              fontSize: '16px',
-              fontWeight: 'bold',
-              cursor: 'pointer'
-            }}>
-              Submit
-            </button>
-          </form>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="app-container">
