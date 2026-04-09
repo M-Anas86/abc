@@ -1439,7 +1439,7 @@ void main()
     output: `Enter number of elements: 9\nEnter the 9 elements: 9 8 7 6 5 4 3 2 1\nSorted array: 1 2 3 4 5 6 7 8 9`
   },
   {
-    title: "19. Kruska Algo",
+    title: "19. Kruskal's Algorithm",
     filename: "KruskaAlgo.exe",
     code: `#include <stdio.h>
 
@@ -1518,7 +1518,7 @@ int main()
     output: `Enter number of vertices: 3\nEnter the adjacency matrix:\n0 5 1\n5 0 3\n1 3 0\nEdge added: 0 <---> 2 (Cost: 1)\nEdge added: 2 <---> 1 (Cost: 3)\nMinimum Cost of Spanning Tree: 4`
   },
   {
-    title: "20. Prims Algo",
+    title: "20. Prims Algorithm",
     filename: "PrimsAlgo.exe",
     code: `#include <stdio.h>
 
@@ -1598,136 +1598,53 @@ int main()
 }`,
     output: `Enter number of vertices: 3\nEnter the adjacency matrix:\n0 5 1\n5 0 3\n1 3 0\nEdge added: 0 <---> 2 (Cost: 1)\nEdge added: 2 <---> 1 (Cost: 3)\nMinimum Cost of Spanning Tree: 4`
   },
-  {
-    title: "21. Tree",
-    filename: "Tree.exe",
+      {
+    title: "21. Travelling Salesman Problem",
+    filename: "TSP.exe",
     code: `#include <stdio.h>
-#include <stdlib.h>
+#include <limits.h>
 
-struct node
-{
-    int data;
-    struct node *left;
-    struct node *right;
+#define N 4
+
+int graph[N][N] = {
+    {0, 10, 15, 20},
+    {10, 0, 35, 25},
+    {15, 35, 0, 30},
+    {20, 25, 30, 0}
 };
 
-struct node *root = NULL;
+int visited[N];
 
-// Create node
-struct node* createNode(int value)
-{
-    struct node *temp = (struct node*)malloc(sizeof(struct node));
-    temp->data = value;
-    temp->left = NULL;
-    temp->right = NULL;
-    return temp;
-}
+int tsp(int city, int count, int cost) {
+    int i, min = INT_MAX;
 
-// Add node (simple insertion)
-void Add()
-{
-    int value;
-    printf("\\nEnter data: ");
-    scanf("%d", &value);
-
-    if (root == NULL)
-    {
-        root = createNode(value);
-        return;
+    if (count == N) {
+        return cost + graph[city][0];
     }
 
-    struct node *temp = root;
-
-    while (1)
-    {
-        // Insert left
-        if (temp->left == NULL)
-        {
-            temp->left = createNode(value);
-            break;
-        }
-        // Insert right
-        else if (temp->right == NULL)
-        {
-            temp->right = createNode(value);
-            break;
-        }
-        else
-        {
-            temp = temp->left; // move left side
+    for (i = 0; i < N; i++) {
+        if (visited[i] == 0) {
+            visited[i] = 1;
+            int temp = tsp(i, count + 1, cost + graph[city][i]);
+            if (temp < min)
+                min = temp;
+            visited[i] = 0;
         }
     }
+    return min;
 }
 
-// Inorder Traversal
-void Display(struct node *temp)
-{
-    if (temp != NULL)
-    {
-        Display(temp->left);
-        printf("%d ", temp->data);
-        Display(temp->right);
-    }
-}
+int main() {
+    int i;
+    for (i = 0; i < N; i++)
+        visited[i] = 0;
 
-// Remove (simple delete root)
-void Remove()
-{
-    if (root == NULL)
-    {
-        printf("Tree is empty\\n");
-    }
-    else
-    {
-        printf("Removed root node: %d\\n", root->data);
-        free(root);
-        root = NULL;
-    }
-}
+    visited[0] = 1;
+    int result = tsp(0, 1, 0);
 
-int main()
-{
-    int opt, ch = 1;
-
-    while (ch)
-    {
-        printf("\\n1. Add node\\n");
-        printf("2. Remove root node\\n");
-        printf("3. Display (Inorder)\\n");
-        printf("4. Terminate\\n");
-        printf("Choose option: ");
-        scanf("%d", &opt);
-
-        switch (opt)
-        {
-        case 1:
-            Add();
-            break;
-        case 2:
-            Remove();
-            break;
-        case 3:
-            if (root == NULL)
-                printf("Tree is empty\\n");
-            else
-            {
-                printf("Tree elements: ");
-                Display(root);
-                printf("\\n");
-            }
-            break;
-        case 4:
-            return 0;
-        default:
-            printf("Choose properly\\n");
-        }
-
-        printf("Want to continue (1/0): ");
-        scanf("%d", &ch);
-    }
-
+    printf("Minimum cost: %d", result);
     return 0;
 }`,
-    output: `Enter no of elements: 3\nEnter values: 1 2 3\nProcessing...\nProgram executed successfully.`
-  },
+    output: `Minimum cost: 80`
+  }
 ];
