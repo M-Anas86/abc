@@ -63,7 +63,7 @@ function App() {
     centerText("DATA STRUCTURE & ALGORITHM LAB", 18, "bold", [65, 105, 225], 12);
 
     if (formData.rollNo) {
-      centerText(formData.rollNo, 14, "bold", [65, 105, 225], 15);
+      centerText(formData.rollNo.toUpperCase(), 14, "bold", [65, 105, 225], 15);
     } else {
       currentY += 15;
     }
@@ -73,17 +73,15 @@ function App() {
 
     centerText("MASTER OF COMPUTER APPLICATION", 14, "bold", [192, 0, 0], 12);
     centerText("1ST Year / 2ND Semester", 12, "bold", null, 8);
-    centerText("2024-2025", 12, "bold", null, 15);
+    centerText("2025-26", 12, "bold", null, 15);
 
     centerText("By", 12, "bold", null, 10);
 
     doc.setFont("helvetica", "bold");
     doc.setFontSize(14);
-    const nameText = formData.name || "Student Name";
+    const nameText = (formData.name || "Student Name").toUpperCase();
     const nameWidth = doc.getTextWidth(nameText);
     const nameX = (pageWidth - nameWidth) / 2;
-    doc.setFillColor(255, 244, 153);
-    doc.rect(nameX - 5, currentY - 5.5, nameWidth + 10, 7.5, "F");
     doc.setTextColor(0, 0, 0);
     doc.text(nameText, nameX, currentY);
     currentY += 15;
@@ -95,7 +93,7 @@ function App() {
     const rollLabelWidth = doc.getTextWidth(rollLabel);
 
     doc.setFont("helvetica", "bold");
-    const rollValText = formData.rollNo || "Roll No";
+    const rollValText = (formData.rollNo || "Roll No").toUpperCase();
     const rollValWidth = doc.getTextWidth(rollValText);
 
     const totalRollWidth = rollLabelWidth + rollValWidth + 6;
@@ -104,8 +102,6 @@ function App() {
     doc.setFont("helvetica", "normal");
     doc.text(rollLabel, startX, currentY);
 
-    doc.setFillColor(255, 244, 153);
-    doc.rect(startX + rollLabelWidth - 2, currentY - 4.5, rollValWidth + 10, 6, "F");
     doc.setFont("helvetica", "bold");
     doc.text(rollValText, startX + rollLabelWidth + 3, currentY);
     currentY += 10;
@@ -113,7 +109,7 @@ function App() {
     const enLabel = "Enrolment Number:  ";
     doc.setFont("helvetica", "normal");
     const enLabelWidth = doc.getTextWidth(enLabel);
-    const enValText = formData.enrollmentNo || "Enrolment No";
+    const enValText = (formData.enrollmentNo || "Enrolment No").toUpperCase();
     doc.setFont("helvetica", "bold");
     const enValWidth = doc.getTextWidth(enValText);
 
@@ -123,8 +119,6 @@ function App() {
     doc.setFont("helvetica", "normal");
     doc.text(enLabel, startXEn, currentY);
 
-    doc.setFillColor(255, 244, 153);
-    doc.rect(startXEn + enLabelWidth - 2, currentY - 4.5, enValWidth + 10, 6, "F");
     doc.setFont("helvetica", "bold");
     doc.text(enValText, startXEn + enLabelWidth + 3, currentY);
     currentY += 15;
@@ -215,19 +209,19 @@ function App() {
 
     currentY += 10;
     // Line 2
-    const certName = formData.name ? formData.name : "Student Name";
+    const certName = formData.name ? formData.name.toUpperCase() : "STUDENT NAME";
     renderCenteredLine(currentY, [
       { text: "(25MMCA012HY) ", style: "bolditalic" },
       { text: "Record of Mr./Ms. ", style: "italic" },
-      { text: certName, style: "bolditalic", bg: true },
+      { text: certName, style: "bolditalic" },
       { text: " , Roll No ", style: "italic" }
     ]);
 
     currentY += 10;
     // Line 3
-    const certRoll = formData.rollNo ? formData.rollNo : "Roll No";
+    const certRoll = formData.rollNo ? formData.rollNo.toUpperCase() : "ROLL NO";
     renderCenteredLine(currentY, [
-      { text: certRoll, style: "bolditalic", bg: true },
+      { text: certRoll, style: "bolditalic" },
       { text: " , MCA I Year, II Semester, ", style: "bolditalic" },
       { text: "of the academic year 2025-26.", style: "italic" }
     ]);
