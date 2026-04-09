@@ -144,7 +144,30 @@ function App() {
     centerText("DEPARTMENT OF COMPUTER SCIENCE & INFORMATION TECHNOLOGY", 10, "bold", null, 7);
     centerText("MAULANA AZAD NATIONAL URDU UNIVERSITY", 15, "bold", [31, 73, 125], 7);
     centerText("(A Central University established by an Act of Parliament in 1998)", 10, "normal", null, 6);
-    centerText("Accredited Grade \"A+\" by NAAC", 10, "bold", null, 15);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(10);
+    const p1 = "Accredited Grade \"A";
+    const p2 = "+";
+    const p3 = "\" by NAAC";
+    
+    const w1 = doc.getTextWidth(p1);
+    doc.setFontSize(6);
+    const w2 = doc.getTextWidth(p2);
+    doc.setFontSize(10);
+    const w3 = doc.getTextWidth(p3);
+    
+    const totalW = w1 + w2 + w3;
+    let startXX = (pageWidth - totalW) / 2;
+    
+    doc.text(p1, startXX, currentY);
+    startXX += w1 + 0.2; // Add tiny horizontal gap
+    doc.setFontSize(6);
+    doc.text(p2, startXX, currentY - 2); // Standard superscript height relative to baseline
+    startXX += w2 + 0.2;
+    doc.setFontSize(10);
+    doc.text(p3, startXX, currentY);
+    
+    currentY += 15;
 
     // --- Certificate Page --- //
     doc.addPage();
@@ -225,22 +248,67 @@ function App() {
 
     let yPos = margin + 10;
 
+    // Calculate Index Pages and pre-allocate them
+    let indexPagesNeeded = 1;
+    let idxY = margin + 40; // 30 for INDEX headers + 10 for table header
+
+    const progColWidth = (pageWidth - (margin * 2)) * 0.57; // ~57% width for title
+    const indexRowHeights = [];
+    
+    // Process titles to format: "Write a program of..."
+    const processedPrograms = PROGRAMS.map((prog, index) => {
+      const cleanTitle = prog.title.replace(/^\d+\.\s*/, '');
+      const newTitle = `${index + 1}. Write a program of ${cleanTitle}`;
+      return { ...prog, printTitle: newTitle, cleanTitle };
+    });
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(9);
+    processedPrograms.forEach(prog => {
+        const lines = doc.splitTextToSize(prog.printTitle, progColWidth - 4);
+        const rowH = Math.max(10, lines.length * 5 + 4);
+        if (idxY + rowH > pageHeight - margin) {
+            indexPagesNeeded++;
+            idxY = margin + 10; // new page table header
+        }
+        idxY += rowH;
+        indexRowHeights.push({ lines, rowH });
+    });
+
+    const indexStartPageNum = doc.internal.getNumberOfPages() + 1;
+    for (let i = 0; i < indexPagesNeeded; i++) {
+        doc.addPage();
+    }
+
     // Function to handle multi-page text rendering smoothly
     const renderBlock = (titleBlock, contentBlock, isCode = true, isTerminal = false) => {
       // Add a little block padding conceptually
-      doc.setFont("helvetica", "bold");
-      yPos += 10;
-      if (yPos > pageHeight - margin) {
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(10);
+      const splitContent = doc.splitTextToSize(contentBlock, pageWidth - (margin * 2));
+      
+      const estimatedHeight = 17 + (splitContent.length * 5); // 10 padding + 7 title gap + total text lines height
+      
+      // If terminal output block can fit on a single page, enforce it to start on a new page if it doesn't fit on the current page
+      if (isTerminal && estimatedHeight < (pageHeight - (margin * 2)) && (yPos + estimatedHeight > pageHeight - margin)) {
         doc.addPage();
         yPos = margin;
+      } else {
+        yPos += 10;
+        if (yPos > pageHeight - margin) {
+          doc.addPage();
+          yPos = margin;
+        }
       }
+
+      // Restore title formatting
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(12);
       doc.text(titleBlock, margin, yPos);
       yPos += 7;
 
       doc.setFont(isCode ? "Consolas" : "helvetica", "normal");
       doc.setFontSize(10);
-      
-      const splitContent = doc.splitTextToSize(contentBlock, pageWidth - (margin * 2));
       
       for (let i = 0; i < splitContent.length; i++) {
         if (yPos > pageHeight - margin) {
@@ -264,41 +332,150 @@ function App() {
     };
 
     // --- Programs Pages --- //
-    PROGRAMS.forEach(prog => {
+    const progStartPages = [];
+    
+    processedPrograms.forEach((prog, index) => {
       // Force every code to start on a new page
       doc.addPage();
+      progStartPages.push(doc.internal.getNumberOfPages());
       yPos = margin + 10;
 
       // Title
       doc.setFont("helvetica", "bold");
-      doc.setFontSize(14);
-      doc.text(prog.title, margin, yPos);
-      yPos += 5;
+      doc.setFontSize(12);
+      
+      const titleLines = doc.splitTextToSize(prog.printTitle, pageWidth - (margin * 2));
+      doc.text(titleLines, margin, yPos);
+      yPos += (titleLines.length * 6);
 
       // Draw Code
-      renderBlock("Source Code:", prog.code, true);
+      // Remove any unnecessary blank lines and trailing spaces to save PDF space
+      const cleanCode = prog.code.replace(/\n\s*\n+/g, '\n').replace(/[ \t]+$/gm, '').trim();
+      renderBlock("Source Code:", cleanCode, true);
 
       // Draw Output
       // Requirement 4: The terminal output should include a dynamic file path based on the user's name
-      const safeName = formData.name ? formData.name.trim() : "User";
+      let safeName = "User";
+      if (formData.name) {
+        const nameParts = formData.name.trim().split(/\s+/);
+        safeName = nameParts.length > 1 ? nameParts[1] : nameParts[0];
+      }
+      
+      let folderName = "Arrays";
+      const lowerTitle = prog.cleanTitle.toLowerCase();
+      if (lowerTitle.includes("queue")) folderName = "Queue";
+      else if (lowerTitle.includes("stack")) folderName = "Stack";
+      else if (lowerTitle.includes("tree")) folderName = "Tree";
+      else if (lowerTitle.includes("graph")) folderName = "Graph";
+      else if (lowerTitle.includes("list")) folderName = "LinkedList";
+      else if (lowerTitle.includes("sort")) folderName = "Sorting";
+      else if (lowerTitle.includes("search")) folderName = "Searching";
+
       const baseFilename = prog.filename.replace('.exe', '');
-      const psPath = `PS C:\\Users\\${safeName}\\OneDrive\\Desktop\\DSA with C\\Arrays> `;
+      const psPath = `PS C:\\Users\\${safeName}\\OneDrive\\Desktop\\DSA with C\\${folderName}> `;
       
       const fullOutput = `${psPath}gcc .\\${baseFilename}.c\n${psPath}.\\a.exe\n${prog.output}`;
       
       yPos += 5;
       renderBlock("Output:", fullOutput, true, true);
     });
+    // --- Draw Index Page --- //
+    let currentIdxPage = indexStartPageNum;
+    doc.setPage(currentIdxPage);
+    
+    // widths: S.No (10%), Date (15%), Title (57%), Remarks (18%)
+    const innerW = pageWidth - (margin * 2);
+    const colW = [innerW * 0.10, innerW * 0.15, innerW * 0.57, innerW * 0.18];
+    const colX = [
+      margin,
+      margin + colW[0],
+      margin + colW[0] + colW[1],
+      margin + colW[0] + colW[1] + colW[2]
+    ];
+
+    const drawIndexHeader = (isFirstPage) => {
+      let currentHeaderY = margin;
+      if (isFirstPage) {
+        doc.setFont("helvetica", "bold");
+        doc.setTextColor(0, 0, 0);
+        doc.setFontSize(16);
+        const title1 = "INDEX";
+        doc.text(title1, (pageWidth - doc.getTextWidth(title1)) / 2, margin + 10);
+        
+        doc.setFontSize(14);
+        doc.setTextColor(31, 73, 125);
+        const title2 = "LAB PRACTICE RECORD";
+        doc.text(title2, (pageWidth - doc.getTextWidth(title2)) / 2, margin + 20);
+        
+        currentHeaderY = margin + 30;
+      }
+      
+      // Table Header Row
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(10);
+      doc.setTextColor(0, 0, 0);
+      doc.setFillColor(240, 240, 240);
+      doc.setDrawColor(0, 0, 0);
+      doc.rect(margin, currentHeaderY, innerW, 10, "F");
+      doc.rect(margin, currentHeaderY, innerW, 10, "S");
+      
+      // Vertical lines for header
+      for (let i = 1; i < colX.length; i++) {
+        doc.line(colX[i], currentHeaderY, colX[i], currentHeaderY + 10);
+      }
+      
+      // Headers
+      doc.text("S.No", colX[0] + (colW[0]/2), currentHeaderY + 6, { align: "center" });
+      doc.text("Date", colX[1] + (colW[1]/2), currentHeaderY + 6, { align: "center" });
+      doc.text("Program Name", colX[2] + (colW[2]/2), currentHeaderY + 6, { align: "center" });
+      doc.text("Remarks", colX[3] + (colW[3]/2), currentHeaderY + 6, { align: "center" });
+      
+      return currentHeaderY + 10;
+    };
+
+    idxY = drawIndexHeader(true);
+
+    processedPrograms.forEach((prog, i) => {
+        const { lines, rowH } = indexRowHeights[i];
+        
+        if (idxY + rowH > pageHeight - margin) {
+            currentIdxPage++;
+            doc.setPage(currentIdxPage);
+            idxY = drawIndexHeader(false);
+        }
+        
+        // Draw Row
+        doc.setDrawColor(0, 0, 0);
+        doc.rect(margin, idxY, innerW, rowH, "S"); // outer border
+        // Vertical lines
+        for (let j = 1; j < colX.length; j++) {
+          doc.line(colX[j], idxY, colX[j], idxY + rowH);
+        }
+        
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(9);
+        
+        // S.No
+        doc.text((i + 1).toString(), colX[0] + (colW[0]/2), idxY + (rowH/2) + 2, { align: "center" });
+        
+        // Title
+        doc.text(lines, colX[2] + 2, idxY + 6);
+        
+        // Remarks (No value needed natively)
+
+        idxY += rowH;
+    });
 
     // Apply Global Border to All Pages
     const totalPages = doc.internal.getNumberOfPages();
+    const globalProgStartPage = indexStartPageNum + indexPagesNeeded - 1;
     for (let i = 1; i <= totalPages; i++) {
       doc.setPage(i);
       doc.setDrawColor(0, 0, 0); // Solid black
       doc.setLineWidth(0.5);
       doc.rect(10, 10, pageWidth - 20, pageHeight - 20); // 10 margin
 
-      if (i > 1) {
+      if (i > globalProgStartPage) {
         doc.setFont("helvetica", "normal");
         doc.setFontSize(9);
         doc.text(i.toString(), pageWidth - 15, pageHeight - 13);

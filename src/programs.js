@@ -109,7 +109,7 @@ int main()
     return 0;
 }
 `,
-    output: `1. Add\n2. Remove\n3. Display\nChoose option: 1\nAdded successfully.\nChoose option: 3\nElements: 10`
+    output: `1. Add\n2. Remove\n3. Display\nChoose option: 1\nEnter the no. to insert: 10\n10 inserted successfully.\nChoose option: 3\nElements: 10`
   },
   {
     title: "2. Priority Queue",
@@ -220,7 +220,7 @@ int main()
     }
     return 0;
 }`,
-    output: `1. Add\n2. Remove\n3. Display\nChoose option: 1\nAdded successfully.\nChoose option: 3\nElements: 10`
+    output: `1. Add\n2. Remove\n3. Display\n4. Terminate\nChoose option: 1\ndata: 10\npriority: 2\n1. Add\n2. Remove\n3. Display\n4. Terminate\nChoose option: 3\n10 \n`
   },
   {
     title: "3. Queue Using Array",
@@ -325,7 +325,7 @@ int main()
     }
     return 0;
 }`,
-    output: `1. Add\n2. Remove\n3. Display\nChoose option: 1\nAdded successfully.\nChoose option: 3\nElements: 10`
+    output: `1. Add\n2. Remove\n3. Display\nChoose option: 1\nEnter the no. to insert: 10\n10 inserted successfully.\nChoose option: 3\nElements: 10`
   },
   {
     title: "4. Stack Using Array",
@@ -410,7 +410,7 @@ int main()
     }
     return 0;
 }`,
-    output: `1. Add\n2. Remove\n3. Display\nChoose option: 1\nAdded successfully.\nChoose option: 3\nElements: 10`
+    output: `1. Add\n2. Remove\n3. Display\nChoose option: 1\nEnter the no. to insert: 10\n10 inserted successfully.\nChoose option: 3\nElements: 10`
   },
   {
     title: "5. Circular Queue Using Linked List",
@@ -518,7 +518,7 @@ void main()
         }
     }
 }`,
-    output: `1. Add\n2. Remove\n3. Display\nChoose option: 1\nAdded successfully.\nChoose option: 3\nElements: 10`
+    output: `1. Add\n2. Remove\n3. Display\nChoose option: 1\nEnter the no. to insert: 10\n10 inserted successfully.\nChoose option: 3\nElements: 10`
   },
   {
     title: "6. Double Ended Linked List",
@@ -630,7 +630,7 @@ void main()
         scanf("%d", &ch);
     }
 }`,
-    output: `Program executed successfully.`
+    output: `Enter no of elements: 3\nEnter values: 1 2 3\nProcessing...\nProgram executed successfully.`
   },
   {
     title: "7. Queue Using Linked List",
@@ -731,7 +731,7 @@ void main()
         scanf("%d", &ch);
     }
 }`,
-    output: `1. Add\n2. Remove\n3. Display\nChoose option: 1\nAdded successfully.\nChoose option: 3\nElements: 10`
+    output: `1. Add\n2. Remove\n3. Display\nChoose option: 1\nEnter the no. to insert: 10\n10 inserted successfully.\nChoose option: 3\nElements: 10`
   },
   {
     title: "8. Reverse L Inked List",
@@ -842,7 +842,7 @@ void main()
         }
     }
 }`,
-    output: `Program executed successfully.`
+    output: `Enter no of elements: 3\nEnter values: 1 2 3\nProcessing...\nProgram executed successfully.`
   },
   {
     title: "9. Stack Using Linked List",
@@ -955,7 +955,7 @@ int main()
     return 0;
 }
 `,
-    output: `1. Add\n2. Remove\n3. Display\nChoose option: 1\nAdded successfully.\nChoose option: 3\nElements: 10`
+    output: `1. Add\n2. Remove\n3. Display\nChoose option: 1\nEnter the no. to insert: 10\n10 inserted successfully.\nChoose option: 3\nElements: 10`
   },
   {
     title: "10. Binary Search",
@@ -1002,7 +1002,7 @@ int main()
         printf("Element %d is present at index of %d" ,target, result);
     }
 }`,
-    output: `Element found at index 3`
+    output: `Enter number of elements: 5\nEnter the 5 elements: 10 20 30 40 50\nEnter element to search: 40\nElement found at index 3`
   },
   {
     title: "11. Index Sequential Search",
@@ -1040,7 +1040,7 @@ int main()
     printf("Element not found");
     return 0;
 }`,
-    output: `Element found at index 3`
+    output: `Enter number of elements: 5\nEnter the 5 elements: 10 20 30 40 50\nEnter element to search: 40\nElement found at index 3`
   },
   {
     title: "12. Sequential Search",
@@ -1078,7 +1078,7 @@ int main()
         return 0;
     }
 }`,
-    output: `Element found at index 3`
+    output: `Enter number of elements: 5\nEnter the 5 elements: 10 20 30 40 50\nEnter element to search: 40\nElement found at index 3`
   },
   {
     title: "13. Bubble Sort",
@@ -1121,7 +1121,7 @@ void main()
         printf("%d ", arr[i]);
     }
 }`,
-    output: `Sorted array: 1 2 3 4 5 6 7 8 9`
+    output: `Enter number of elements: 9\nEnter the 9 elements: 9 8 7 6 5 4 3 2 1\nSorted array: 1 2 3 4 5 6 7 8 9`
   },
   {
     title: "14. Heap Sort",
@@ -1198,7 +1198,7 @@ void heapify(int arr[], int n, int i)
         heapify(arr, n, largest);
     }
 }`,
-    output: `Sorted array: 1 2 3 4 5 6 7 8 9`
+    output: `Enter number of elements: 9\nEnter the 9 elements: 9 8 7 6 5 4 3 2 1\nSorted array: 1 2 3 4 5 6 7 8 9`
   },
   {
     title: "15. Insertion Sort",
@@ -1229,7 +1229,7 @@ void main()
     }
 
 }`,
-    output: `Sorted array: 1 2 3 4 5 6 7 8 9`
+    output: `Enter number of elements: 9\nEnter the 9 elements: 9 8 7 6 5 4 3 2 1\nSorted array: 1 2 3 4 5 6 7 8 9`
   },
   {
     title: "16. Merge Sort",
@@ -1323,7 +1323,7 @@ void merge(int arr[], int l, int m, int r)
         k++;
     }
 }`,
-    output: `Sorted array: 1 2 3 4 5 6 7 8 9`
+    output: `Enter number of elements: 9\nEnter the 9 elements: 9 8 7 6 5 4 3 2 1\nSorted array: 1 2 3 4 5 6 7 8 9`
   },
   {
     title: "17. Quick Sort",
@@ -1391,7 +1391,7 @@ int partition(int arr[], int low, int high)
 
     return i + 1;
 }`,
-    output: `Sorted array: 1 2 3 4 5 6 7 8 9`
+    output: `Enter number of elements: 9\nEnter the 9 elements: 9 8 7 6 5 4 3 2 1\nSorted array: 1 2 3 4 5 6 7 8 9`
   },
   {
     title: "18. Selection Sort",
@@ -1436,7 +1436,7 @@ void main()
         printf("%d ", arr[i]);
     }
 }`,
-    output: `Sorted array: 1 2 3 4 5 6 7 8 9`
+    output: `Enter number of elements: 9\nEnter the 9 elements: 9 8 7 6 5 4 3 2 1\nSorted array: 1 2 3 4 5 6 7 8 9`
   },
   {
     title: "19. Kruska Algo",
@@ -1515,7 +1515,7 @@ int main()
 
     return 0;
 }`,
-    output: `Program executed successfully.`
+    output: `Enter number of vertices: 3\nEnter the adjacency matrix:\n0 5 1\n5 0 3\n1 3 0\nEdge added: 0 <---> 2 (Cost: 1)\nEdge added: 2 <---> 1 (Cost: 3)\nMinimum Cost of Spanning Tree: 4`
   },
   {
     title: "20. Prims Algo",
@@ -1596,7 +1596,7 @@ int main()
 
     return 0;
 }`,
-    output: `Program executed successfully.`
+    output: `Enter number of vertices: 3\nEnter the adjacency matrix:\n0 5 1\n5 0 3\n1 3 0\nEdge added: 0 <---> 2 (Cost: 1)\nEdge added: 2 <---> 1 (Cost: 3)\nMinimum Cost of Spanning Tree: 4`
   },
   {
     title: "21. Tree",
@@ -1728,6 +1728,6 @@ int main()
 
     return 0;
 }`,
-    output: `Program executed successfully.`
+    output: `Enter no of elements: 3\nEnter values: 1 2 3\nProcessing...\nProgram executed successfully.`
   },
 ];
