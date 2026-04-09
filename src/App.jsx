@@ -11,7 +11,7 @@ function App() {
     rollNo: '',
     enrollmentNo: ''
   });
-  
+
   const [pdfPreviewUrl, setPdfPreviewUrl] = useState(null);
   const [pdfFileName, setPdfFileName] = useState("");
 
@@ -27,7 +27,7 @@ function App() {
     e.preventDefault();
 
     const doc = new jsPDF();
-    
+
     // Add custom VS Code standard font (Consolas)
     doc.addFileToVFS('Consolas.ttf', consolaFont);
     doc.addFont('Consolas.ttf', 'Consolas', 'normal');
@@ -38,34 +38,34 @@ function App() {
 
     // --- Front Page --- //
     let currentY = 25;
-    
+
     const centerText = (text, size, weight, color, yOffset, underline = false) => {
       doc.setFont("helvetica", weight);
       doc.setFontSize(size);
       if (color) doc.setTextColor(color[0], color[1], color[2]);
       else doc.setTextColor(0, 0, 0);
-      
+
       const width = doc.getTextWidth(text);
       const x = (pageWidth - width) / 2;
       doc.text(text, x, currentY);
-      
+
       if (underline) {
         doc.setLineWidth(0.5);
         if (color) doc.setDrawColor(color[0], color[1], color[2]);
         else doc.setDrawColor(0, 0, 0);
         doc.line(x, currentY + 1.5, x + width, currentY + 1.5);
       }
-      
+
       currentY += yOffset;
     };
 
     centerText("A Lab Manual For", 14, "bold", null, 12);
     centerText("DATA STRUCTURE & ALGORITHM LAB", 18, "bold", [65, 105, 225], 12);
-    
+
     if (formData.rollNo) {
-        centerText(formData.rollNo, 14, "bold", [65, 105, 225], 15);
+      centerText(formData.rollNo, 14, "bold", [65, 105, 225], 15);
     } else {
-        currentY += 15;
+      currentY += 15;
     }
 
     centerText("A RECORD SUBMITTED IN PARTIAL FULFILLMENT OF THE REQUIREMENTS", 10, "bold", null, 6);
@@ -90,20 +90,20 @@ function App() {
 
     doc.setFont("helvetica", "normal");
     doc.setFontSize(12);
-    
+
     const rollLabel = "Roll Number:  ";
     const rollLabelWidth = doc.getTextWidth(rollLabel);
-    
+
     doc.setFont("helvetica", "bold");
     const rollValText = formData.rollNo || "Roll No";
     const rollValWidth = doc.getTextWidth(rollValText);
-    
+
     const totalRollWidth = rollLabelWidth + rollValWidth + 6;
     const startX = (pageWidth - totalRollWidth) / 2;
-    
+
     doc.setFont("helvetica", "normal");
     doc.text(rollLabel, startX, currentY);
-    
+
     doc.setFillColor(255, 244, 153);
     doc.rect(startX + rollLabelWidth - 2, currentY - 4.5, rollValWidth + 10, 6, "F");
     doc.setFont("helvetica", "bold");
@@ -116,13 +116,13 @@ function App() {
     const enValText = formData.enrollmentNo || "Enrolment No";
     doc.setFont("helvetica", "bold");
     const enValWidth = doc.getTextWidth(enValText);
-    
+
     const totalEnWidth = enLabelWidth + enValWidth + 6;
     const startXEn = (pageWidth - totalEnWidth) / 2;
-    
+
     doc.setFont("helvetica", "normal");
     doc.text(enLabel, startXEn, currentY);
-    
+
     doc.setFillColor(255, 244, 153);
     doc.rect(startXEn + enLabelWidth - 2, currentY - 4.5, enValWidth + 10, 6, "F");
     doc.setFont("helvetica", "bold");
@@ -132,7 +132,7 @@ function App() {
     centerText("Submitted to", 12, "bold", null, 12);
     centerText("Dr. A Satya Sai Kumar", 14, "bold", null, 6);
     centerText("Assistant Professor", 12, "normal", null, 10);
-    
+
     centerText("Department of CS & IT, MANUU", 12, "normal", null, 6);
 
     const logoSize = 24;
@@ -140,7 +140,7 @@ function App() {
     doc.addImage(manuuLogo, 'PNG', logoX, currentY, logoSize, logoSize);
     currentY += logoSize + 6;
 
-    centerText("SCHOOL OF TECHNOLOGY", 14, "bold", [200, 50, 50], 8, true); 
+    centerText("SCHOOL OF TECHNOLOGY", 14, "bold", [200, 50, 50], 8, true);
     centerText("DEPARTMENT OF COMPUTER SCIENCE & INFORMATION TECHNOLOGY", 10, "bold", null, 7);
     centerText("MAULANA AZAD NATIONAL URDU UNIVERSITY", 15, "bold", [31, 73, 125], 7);
     centerText("(A Central University established by an Act of Parliament in 1998)", 10, "normal", null, 6);
@@ -149,16 +149,16 @@ function App() {
     const p1 = "Accredited Grade \"A";
     const p2 = "+";
     const p3 = "\" by NAAC";
-    
+
     const w1 = doc.getTextWidth(p1);
     doc.setFontSize(6);
     const w2 = doc.getTextWidth(p2);
     doc.setFontSize(10);
     const w3 = doc.getTextWidth(p3);
-    
+
     const totalW = w1 + w2 + w3;
     let startXX = (pageWidth - totalW) / 2;
-    
+
     doc.text(p1, startXX, currentY);
     startXX += w1 + 0.2; // Add tiny horizontal gap
     doc.setFontSize(6);
@@ -166,7 +166,7 @@ function App() {
     startXX += w2 + 0.2;
     doc.setFontSize(10);
     doc.text(p3, startXX, currentY);
-    
+
     currentY += 15;
 
     // --- Certificate Page --- //
@@ -190,7 +190,7 @@ function App() {
         doc.setFont("helvetica", p.style);
         totalWidth += doc.getTextWidth(p.text);
       });
-      
+
       let x = (pageWidth - totalWidth) / 2;
       parts.forEach(p => {
         doc.setFont("helvetica", p.style);
@@ -206,7 +206,7 @@ function App() {
 
     currentY += 5;
     doc.setFontSize(11);
-    
+
     // Paragraph Line 1
     renderCenteredLine(currentY, [
       { text: "Certified that this is the Bonafide ", style: "italic" },
@@ -254,7 +254,7 @@ function App() {
 
     const progColWidth = (pageWidth - (margin * 2)) * 0.57; // ~57% width for title
     const indexRowHeights = [];
-    
+
     // Process titles to format: "Write a program of..."
     const processedPrograms = PROGRAMS.map((prog, index) => {
       const cleanTitle = prog.title.replace(/^\d+\.\s*/, '');
@@ -265,19 +265,19 @@ function App() {
     doc.setFont("helvetica", "normal");
     doc.setFontSize(9);
     processedPrograms.forEach(prog => {
-        const lines = doc.splitTextToSize(prog.printTitle, progColWidth - 4);
-        const rowH = Math.max(10, lines.length * 5 + 4);
-        if (idxY + rowH > pageHeight - margin) {
-            indexPagesNeeded++;
-            idxY = margin + 10; // new page table header
-        }
-        idxY += rowH;
-        indexRowHeights.push({ lines, rowH });
+      const lines = doc.splitTextToSize(prog.printTitle, progColWidth - 4);
+      const rowH = Math.max(10, lines.length * 5 + 4);
+      if (idxY + rowH > pageHeight - margin) {
+        indexPagesNeeded++;
+        idxY = margin + 10; // new page table header
+      }
+      idxY += rowH;
+      indexRowHeights.push({ lines, rowH });
     });
 
     const indexStartPageNum = doc.internal.getNumberOfPages() + 1;
     for (let i = 0; i < indexPagesNeeded; i++) {
-        doc.addPage();
+      doc.addPage();
     }
 
     // Function to handle multi-page text rendering smoothly
@@ -286,9 +286,9 @@ function App() {
       doc.setFont("helvetica", "normal");
       doc.setFontSize(10);
       const splitContent = doc.splitTextToSize(contentBlock, pageWidth - (margin * 2));
-      
+
       const estimatedHeight = 17 + (splitContent.length * 5); // 10 padding + 7 title gap + total text lines height
-      
+
       // If terminal output block can fit on a single page, enforce it to start on a new page if it doesn't fit on the current page
       if (isTerminal && estimatedHeight < (pageHeight - (margin * 2)) && (yPos + estimatedHeight > pageHeight - margin)) {
         doc.addPage();
@@ -309,7 +309,7 @@ function App() {
 
       doc.setFont(isCode ? "Consolas" : "helvetica", "normal");
       doc.setFontSize(10);
-      
+
       for (let i = 0; i < splitContent.length; i++) {
         if (yPos > pageHeight - margin) {
           doc.addPage();
@@ -317,7 +317,7 @@ function App() {
           doc.setFont(isCode ? "Consolas" : "helvetica", "normal");
           doc.setFontSize(10);
         }
-        
+
         // Draw background for terminal output seamlessly line-by-line
         if (isTerminal) {
           doc.setFillColor(235, 235, 235); // A nice light-grey for depth
@@ -333,7 +333,7 @@ function App() {
 
     // --- Programs Pages --- //
     const progStartPages = [];
-    
+
     processedPrograms.forEach((prog, index) => {
       // Force every code to start on a new page
       doc.addPage();
@@ -343,7 +343,7 @@ function App() {
       // Title
       doc.setFont("helvetica", "bold");
       doc.setFontSize(12);
-      
+
       const titleLines = doc.splitTextToSize(prog.printTitle, pageWidth - (margin * 2));
       doc.text(titleLines, margin, yPos);
       yPos += (titleLines.length * 6);
@@ -360,7 +360,7 @@ function App() {
         const nameParts = formData.name.trim().split(/\s+/);
         safeName = nameParts.length > 1 ? nameParts[1] : nameParts[0];
       }
-      
+
       let folderName = "Arrays";
       const lowerTitle = prog.cleanTitle.toLowerCase();
       if (lowerTitle.includes("queue")) folderName = "Queue";
@@ -373,16 +373,16 @@ function App() {
 
       const baseFilename = prog.filename.replace('.exe', '');
       const psPath = `PS C:\\Users\\${safeName}\\OneDrive\\Desktop\\DSA with C\\${folderName}> `;
-      
+
       const fullOutput = `${psPath}gcc .\\${baseFilename}.c\n${psPath}.\\a.exe\n${prog.output}`;
-      
+
       yPos += 5;
       renderBlock("Output:", fullOutput, true, true);
     });
     // --- Draw Index Page --- //
     let currentIdxPage = indexStartPageNum;
     doc.setPage(currentIdxPage);
-    
+
     // widths: S.No (10%), Date (15%), Title (57%), Remarks (18%)
     const innerW = pageWidth - (margin * 2);
     const colW = [innerW * 0.10, innerW * 0.15, innerW * 0.57, innerW * 0.18];
@@ -401,15 +401,15 @@ function App() {
         doc.setFontSize(16);
         const title1 = "INDEX";
         doc.text(title1, (pageWidth - doc.getTextWidth(title1)) / 2, margin + 10);
-        
+
         doc.setFontSize(14);
         doc.setTextColor(31, 73, 125);
         const title2 = "LAB PRACTICE RECORD";
         doc.text(title2, (pageWidth - doc.getTextWidth(title2)) / 2, margin + 20);
-        
+
         currentHeaderY = margin + 30;
       }
-      
+
       // Table Header Row
       doc.setFont("helvetica", "bold");
       doc.setFontSize(10);
@@ -418,52 +418,52 @@ function App() {
       doc.setDrawColor(0, 0, 0);
       doc.rect(margin, currentHeaderY, innerW, 10, "F");
       doc.rect(margin, currentHeaderY, innerW, 10, "S");
-      
+
       // Vertical lines for header
       for (let i = 1; i < colX.length; i++) {
         doc.line(colX[i], currentHeaderY, colX[i], currentHeaderY + 10);
       }
-      
+
       // Headers
-      doc.text("S.No", colX[0] + (colW[0]/2), currentHeaderY + 6, { align: "center" });
-      doc.text("Date", colX[1] + (colW[1]/2), currentHeaderY + 6, { align: "center" });
-      doc.text("Program Name", colX[2] + (colW[2]/2), currentHeaderY + 6, { align: "center" });
-      doc.text("Remarks", colX[3] + (colW[3]/2), currentHeaderY + 6, { align: "center" });
-      
+      doc.text("S.No", colX[0] + (colW[0] / 2), currentHeaderY + 6, { align: "center" });
+      doc.text("Date", colX[1] + (colW[1] / 2), currentHeaderY + 6, { align: "center" });
+      doc.text("Program Name", colX[2] + (colW[2] / 2), currentHeaderY + 6, { align: "center" });
+      doc.text("Remarks", colX[3] + (colW[3] / 2), currentHeaderY + 6, { align: "center" });
+
       return currentHeaderY + 10;
     };
 
     idxY = drawIndexHeader(true);
 
     processedPrograms.forEach((prog, i) => {
-        const { lines, rowH } = indexRowHeights[i];
-        
-        if (idxY + rowH > pageHeight - margin) {
-            currentIdxPage++;
-            doc.setPage(currentIdxPage);
-            idxY = drawIndexHeader(false);
-        }
-        
-        // Draw Row
-        doc.setDrawColor(0, 0, 0);
-        doc.rect(margin, idxY, innerW, rowH, "S"); // outer border
-        // Vertical lines
-        for (let j = 1; j < colX.length; j++) {
-          doc.line(colX[j], idxY, colX[j], idxY + rowH);
-        }
-        
-        doc.setFont("helvetica", "normal");
-        doc.setFontSize(9);
-        
-        // S.No
-        doc.text((i + 1).toString(), colX[0] + (colW[0]/2), idxY + (rowH/2) + 2, { align: "center" });
-        
-        // Title
-        doc.text(lines, colX[2] + 2, idxY + 6);
-        
-        // Remarks (No value needed natively)
+      const { lines, rowH } = indexRowHeights[i];
 
-        idxY += rowH;
+      if (idxY + rowH > pageHeight - margin) {
+        currentIdxPage++;
+        doc.setPage(currentIdxPage);
+        idxY = drawIndexHeader(false);
+      }
+
+      // Draw Row
+      doc.setDrawColor(0, 0, 0);
+      doc.rect(margin, idxY, innerW, rowH, "S"); // outer border
+      // Vertical lines
+      for (let j = 1; j < colX.length; j++) {
+        doc.line(colX[j], idxY, colX[j], idxY + rowH);
+      }
+
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(9);
+
+      // S.No
+      doc.text((i + 1).toString(), colX[0] + (colW[0] / 2), idxY + (rowH / 2) + 2, { align: "center" });
+
+      // Title
+      doc.text(lines, colX[2] + 2, idxY + 6);
+
+      // Remarks (No value needed natively)
+
+      idxY += rowH;
     });
 
     // Apply Global Border to All Pages
@@ -485,7 +485,7 @@ function App() {
     // Save
     const safeOutputName = formData.name ? formData.name.replace(/\s+/g, '_') : "Student";
     const fileName = `${safeOutputName}_DSA_Record.pdf`;
-    
+
     const pdfBlob = doc.output('blob');
     const pdfUrl = URL.createObjectURL(pdfBlob);
     setPdfPreviewUrl(pdfUrl);
@@ -494,17 +494,17 @@ function App() {
 
   if (pdfPreviewUrl) {
     return (
-      <div style={{ 
+      <div style={{
         position: 'absolute',
         top: 0,
         left: 0,
-        display: 'flex', 
-        flexDirection: 'column', 
-        alignItems: 'center', 
-        padding: '20px', 
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        padding: '20px',
         height: '100vh',
         width: '100vw',
-        backgroundColor: '#111b22', 
+        backgroundColor: '#111b22',
         fontFamily: 'system-ui, -apple-system, sans-serif',
         zIndex: 1000,
         boxSizing: 'border-box'
@@ -518,11 +518,11 @@ function App() {
           </a>
         </div>
         <div style={{ width: '95%', maxWidth: '1200px', height: 'calc(100vh - 100px)', marginBottom: '20px', backgroundColor: '#525659', borderRadius: '8px', overflow: 'hidden', boxShadow: '0 10px 25px rgba(0,0,0,0.5)' }}>
-          <embed 
-            src={pdfPreviewUrl} 
+          <embed
+            src={pdfPreviewUrl}
             type="application/pdf"
-            width="100%" 
-            height="100%" 
+            width="100%"
+            height="100%"
             style={{ border: 'none' }}
           />
         </div>
@@ -540,43 +540,43 @@ function App() {
 
         <form onSubmit={generatePDF} className="section-card">
           <h2>Student Details</h2>
-          
+
           <div className="input-group">
             <label htmlFor="name">Full Name</label>
-            <input 
-              type="text" 
-              id="name" 
-              name="name" 
-              value={formData.name} 
-              onChange={handleFormChange} 
-              placeholder="e.g. Anas" 
-              required 
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value={formData.name}
+              onChange={handleFormChange}
+              placeholder="e.g. Anas"
+              required
             />
           </div>
-          
+
           <div className="input-group">
             <label htmlFor="rollNo">Roll Number</label>
-            <input 
-              type="text" 
-              id="rollNo" 
-              name="rollNo" 
-              value={formData.rollNo} 
-              onChange={handleFormChange} 
-              placeholder="e.g. 21BCS001" 
-              required 
+            <input
+              type="text"
+              id="rollNo"
+              name="rollNo"
+              value={formData.rollNo}
+              onChange={handleFormChange}
+              placeholder="e.g. 21BCS001"
+              required
             />
           </div>
-          
+
           <div className="input-group">
             <label htmlFor="enrollmentNo">Enrollment Number</label>
-            <input 
-              type="text" 
-              id="enrollmentNo" 
-              name="enrollmentNo" 
-              value={formData.enrollmentNo} 
-              onChange={handleFormChange} 
-              placeholder="e.g. 2021/CS/123" 
-              required 
+            <input
+              type="text"
+              id="enrollmentNo"
+              name="enrollmentNo"
+              value={formData.enrollmentNo}
+              onChange={handleFormChange}
+              placeholder="e.g. 2021/CS/123"
+              required
             />
           </div>
 
